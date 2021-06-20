@@ -1,0 +1,143 @@
+Merhaba arkadaşlar, ROS simülasyon ortamına giriş yapıyoruz. Gerekli kurulumlar ve olası hataların çözümleri aşağıda verilmiştir. Kurs boyunca farklı hatalar ile karşılaşanlar olursa gerekli çözümler buraya eklenerek makale güncellenecektir.
+
+sh Kurulumu
+Makalenin kaynaklar bölümünde bir .sh dosyası var. Bu dosyayı çalıştırıp kurulumların hepsini tamamlayalım, yes/no dediği her bölümde yes diyerek onaylayalım. Terminali açıp indirdiğimiz dosyanın dizinine gidip,  sh kurulumlar.sh dediğimizde kurulumlar yapılacaktır. (Udemy dosyanın ismini değiştiriyorsa örneğin original.sh olarak dosya inmişse ( sh original.sh )
+
+mybot_ws
+Terminalimizi açalım ve git clone https://github.com/richardw05/mybot_ws diyelim.
+
+Ardından aynı terminalde mybot_ws dizinimize gidelim . catkin_make diyelim ve home dizinimize geri dönelim.
+
+Daha sonra gedit ~/.bashrc diyelim ve bashrc dosyamıza, source /home/kullanici_adiniz/mybot_ws/devel/setup.bash satırını ekleyelim, kaydedip çıkalım.
+
+Son olarak terminale gelip: source ~/.bashrc diyelim ve terminalimizi kapatalım.
+
+Kursumuzun ilerleyişinde öncelikle mybot_ws ardından turtlebot3 kullanacağız fakat mybot 'u kullanırken bazı durumlarda turtlebot3 paketine ihtiyacımız olacaktır. Bu sebeple şimdiden turtlebot3 kurulumunu da yapıyoruz.
+
+NOT: Terminal açıp whoami yazdığınızda size kullanıcı adınızı göstermektedir.
+
+
+
+Turtlebot3 Kurulumu
+Terminalimizi açalım.
+
+Ardından,
+
+ali@ali:~$ sudo apt-get install ros-melodic-turtlebot3-* diyelim.
+
+Daha sonra,
+
+ali@ali:~$ cd ~/catkin_ws/src/
+
+ali@ali:~$ git clone https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+
+ali@ali:~$ git clone https://github.com/ROBOTIS-GIT/turtlebot3.git
+
+ali@ali:~$ git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations
+
+ali@ali:~$ git clone https://github.com/ROBOTIS-GIT/turtlebot3_autorace
+
+ali@ali:~$ cd ~/catkin_ws && catkin_make
+
+Daha sonra,
+
+ali@ali:~$ gedit ~/.bashrc
+
+Açılan dosyada en alt satıra gelip export TURTLEBOT3_MODEL=waffle ekliyoruz. Kaydedip dosyayı kapatalım. Daha sonra terminale gelip: source ~/.bashrc diyelim ve terminalimizi kapatalım.
+
+
+
+
+
+Olası Hatalar ve Çözümleri:
+
+
+roslaunch mybot_gazebo mybot_world.launch dediğimizde robotumuz gelmiyor ve Gazebo [Err] [REST.cc:205] Error in REST request. hatası alıyorsak:
+
+/usr/share/ignition/fuel_tools dizininde config.yaml dosyası var. Bu dosyaya sağ tıklayıp VSCode editörümüzle açalım. url kısmını https://api.ignitionrobotics.org olarak değiştirelim. Dosyanın son hali aşağıdaki gibi olacaktır. Ardından kaydetmek istediğimizde VSCode sağ alttan uyarı verecektir. Retry as Sudo bildirimini onaylayarak dosyadaki değişikliği kaydedelim. Dosyanın son hali aşağıdaki gibi olacaktır:
+
+---
+# The list of servers.
+servers:
+  -
+    name: osrf
+    url: https://api.ignitionrobotics.org
+
+  # -
+    # name: another_server
+    # url: https://myserver
+
+# Where are the assets stored in disk.
+# cache:
+#   path: /tmp/ignition/fuel
+
+
+Eğer işe yaramaz ise aynı işlemi bir de burada yapalım:
+
+Ubuntu arayüzünde home dizininde iken sağ üstteki butona tıklayıp seçeneklerden gizli dosyaları göster diyelim.
+
+.ignition isminde bir klasör göreceğiz. İçine girelim,daha sonra fuel klasörüne girelim ve sonrasında da config.yaml dosyasını açalım.(/home/kullanici_adi/.ignition/fuel/config.yaml  Aynı değişiklikleri burada da yapalım.
+
+Kaynak: https://www.youtube.com/watch?v=ftDz_EVoatw
+
+/mybot_ws/src/mybot_description/urdf dizininde yer alan mybot.gazebo isimli dosyayı açalım.
+
+
+
+89.satırda yer alan <visualize>false</visualize> kısmını <visualize>true</visualize> olarak değiştirelim.
+
+
+
+Bu işlemi yaptığınız halde hala mavi lazer görüntüsü gelmiyor ise:
+
+mybot.gazebo içerisinde aşağıdaki değişiklikleri yaparak çözüme ulaşabilirsiniz.
+
+Değişiklikler:
+
+<sensor type="ray" name="head_hokuyo_sensor">
+
+<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+
+Eski hali:
+
+<sensor type="gpu_ray" name="head_hokuyo_sensor">
+
+<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_gpu_laser.so">
+
+
+
+
+
+mybot robotumuzu klavyeden hareket ettirmek için terminalde roslaunch mybot_navigation mybot_teleop.launch dediğimizde :
+
+ERROR: cannot launch node of type [turtlebot_teleop/turtlebot_teleop_key]: turtlebot_teleop hatası alırsak:
+
+/mybot_ws/src/mybot_navigation/launch dizininde yer alan mybot_teleop.launch isimli dosyayı açalım.
+
+turtlebot yazan her yeri turtlebot3 olarak değiştirelim. Dosyanın son hali aşağıdaki gibi olacaktır.
+
+
+
+<?xml version="1.0"?>
+<launch>
+  <!-- turtlebot_teleop_key already has its own built in velocity smoother -->
+  <node pkg="turtlebot3_teleop" type="turtlebot3_teleop_key" name="turtlebot3_teleop_keyboard"  output="screen">
+    <param name="scale_linear" value="0.5" type="double"/>
+    <param name="scale_angular" value="1.5" type="double"/>
+    <remap from="turtlebot3_teleop_keyboard/cmd_vel" to="cmd_vel"/>
+  </node>
+</launch>
+
+
+Öneri:
+Gazebo ile ilgili yukarıda verilen problemler dışında başka problemler çıkıyorsa, mesela Gazebo'yu açıp kapadıktan sonra tekrar girdiğinizde hata veriyorsa veya tekrar gazeboyu açmak istediğinizde hiç açılmıyorsa, gazebo bazen kitlenebiliyor ekranda donuk kalabiliyor, [gazebo-1] process has died [pid 8432, exit code 255 hatası vs. örnekler verilebilir. Bunları önlemek için:
+
+Terminale gelip gedit ~/.bashrc diyelim. Daha sonra bashrc dosyamıza şu satırı ekleyelim.
+
+alias killgazebo="killall -9 gazebo & killall -9 gzserver  & killall -9 gzclient"
+
+Kaydedip çıkalım.
+
+Gazebo'yu direk açmadan önce veya herhangi bir launch dosyasıyla Gazebo'yu açmadan önce,
+
+killgazebo komutunu kullanmayı alışkanlık haline getirirsek sorunlar yüksek ihtimal ortadan kalkacaktır.
