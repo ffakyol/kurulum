@@ -30,119 +30,25 @@ void messageCb(const geometry_msgs::Twist &msg)
 {
  t1=hour();
  input=msg.linear.x;
- mesafe=2.4;
+ mesafe=240;
  yer_degistirme=0;
  yer_degistirme = msg.linear.x * (t1-t0)
-  if(yer_degistirme<=30)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme =yer_degistirme+30;
-  }
-     if(yer_degistirme<60)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme +=yer_degistirme;
-  }
-   if(yer_degistirme<90)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme +=yer_degistirme;
-  }
-   if(yer_degistirme<120)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme +=yer_degistirme;
-  }
-   if(yer_degistirme<150)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme +=yer_degistirme;
-  }
-   if(yer_degistirme<180)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme +=yer_degistirme;
-  }
-   if(yer_degistirme<210)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme +=yer_degistirme;
-  }
-   if(yer_degistirme<240)
-  {
-    digitalWrite(sag_o_1 , HIGH);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , HIGH);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , HIGH);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , HIGH);
-    digitalWrite(sol_a_2 ,  LOW);
-    yer_degistirme +=yer_degistirme;
-  }
- 
- else
+ for(int i=0;i<=7;i++)
  {
- 
-    digitalWrite(sag_o_1 , LOW);
-    digitalWrite(sag_o_2 ,  LOW);
-    digitalWrite(sag_a_1 , LOW);
-    digitalWrite(sag_a_2 ,  LOW);
-     digitalWrite(sol_o_1 , LOW);
-    digitalWrite(sol_o_2 ,  LOW);
-    digitalWrite(sol_a_1 , LOW);
-    digitalWrite(sol_a_2 ,  LOW);
- }
+  if(yer_degistirme<=mesafe)
+  {
+   digitalWrite(sag_o_1 , HIGH);
+   digitalWrite(sag_o_2 ,  LOW);
+   digitalWrite(sag_a_1 , HIGH);
+   digitalWrite(sag_a_2 ,  LOW);
+   digitalWrite(sol_o_1 , HIGH);
+   digitalWrite(sol_o_2 ,  LOW);
+   digitalWrite(sol_a_1 , HIGH);
+   digitalWrite(sol_a_2 ,  LOW);
 
+   }
+   
+ }
 }
 void Motor_init()
 {
