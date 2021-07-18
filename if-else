@@ -1,0 +1,170 @@
+#include <ArduinoHardware.h>
+#include <ros.h>
+#include <geometry_msgs/Twist.h>
+
+
+
+#define sag_o_1 16
+#define sag_o_2 17
+
+#define sag_a_1 27
+#define sag_a_2 29
+
+#define sol_o_1 23
+#define sol_o_2 25
+
+#define sol_a_1 31
+#define sol_a_2 33
+
+float input;
+float yer_degistime;
+float mesafe;
+unsigned long t0;
+unsigned long t1;
+
+
+ros::NodeHandle nh;
+ros::Subscriber<geometry_msgs::Twist> sub("cmd_vel", &messageCb );
+
+void messageCb(const geometry_msgs::Twist &msg)
+{
+ t1=hour();
+ input=msg.linear.x;
+ mesafe=2.4;
+ yer_degistirme=0;
+ yer_degistirme = msg.linear.x * (t1-t0)
+  if(yer_degistirme<=30)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme =yer_degistirme+30;
+  }
+     if(yer_degistirme<60)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme +=yer_degistirme;
+  }
+   if(yer_degistirme<90)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme +=yer_degistirme;
+  }
+   if(yer_degistirme<120)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme +=yer_degistirme;
+  }
+   if(yer_degistirme<150)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme +=yer_degistirme;
+  }
+   if(yer_degistirme<180)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme +=yer_degistirme;
+  }
+   if(yer_degistirme<210)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme +=yer_degistirme;
+  }
+   if(yer_degistirme<240)
+  {
+    digitalWrite(sag_o_1 , HIGH);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , HIGH);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , HIGH);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , HIGH);
+    digitalWrite(sol_a_2 ,  LOW);
+    yer_degistirme +=yer_degistirme;
+  }
+ 
+ else
+ {
+ 
+    digitalWrite(sag_o_1 , LOW);
+    digitalWrite(sag_o_2 ,  LOW);
+    digitalWrite(sag_a_1 , LOW);
+    digitalWrite(sag_a_2 ,  LOW);
+     digitalWrite(sol_o_1 , LOW);
+    digitalWrite(sol_o_2 ,  LOW);
+    digitalWrite(sol_a_1 , LOW);
+    digitalWrite(sol_a_2 ,  LOW);
+ }
+
+}
+void Motor_init()
+{
+  pinMode(sag_o_1, OUTPUT); // motor sürücü pinleri çıkış olarak ayarlandı
+  pinMode(sag_o_2, OUTPUT);
+  pinMode(sag_a_1, OUTPUT);
+  pinMode(sag_a_2, OUTPUT);
+  
+  pinMode(sol_o_1, OUTPUT); // motor sürücü pinleri çıkış olarak ayarlandı
+  pinMode(sol_o_2, OUTPUT);
+  pinMode(sol_a_1, OUTPUT);
+  pinMode(sol_a_2, OUTPUT);
+}
+void setup()
+{
+ Motors_init();
+ nh.initNode();
+ nh.subscribe(sub);
+}
+void loop()
+
+{
+ nh.spinOnce();
+  delay(100); 
+}
