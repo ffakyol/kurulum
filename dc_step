@@ -65,7 +65,7 @@ double speed_ang=0, speed_lin=0;
 
 void deger(const geometry_msgs::Twist& msg)
 {
-   speed_ang = msg.angular.z;
+  speed_ang = msg.angular.z;
   speed_lin = msg.linear.x;
   w_r = (speed_lin/wheel_rad) + ((speed_ang*wheel_sep)/(2.0*wheel_rad));
   w_l = (speed_lin/wheel_rad) - ((speed_ang*wheel_sep)/(2.0*wheel_rad));
@@ -123,7 +123,7 @@ void startMotor1(const std_msgs::Empty& toggle_msg){
 
 
 
-ros::Subscriber<std_msgs::Empty> motor1("motor1/start", &startMotor1);
+ros::Subscriber<std_msgs::Empty> _1("motor1/start", &startMotor1);
 
 void setup() { 
 
@@ -217,6 +217,7 @@ void MotorL(int Pulse_Width1){
      digitalWrite(sag_o_2, LOW);
      digitalWrite(sag_a_1, HIGH);
      digitalWrite(sag_a_2, LOW);
+     
  }
  if (Pulse_Width1 < 0){
      Pulse_Width1=abs(Pulse_Width1);
@@ -249,11 +250,20 @@ void MotorR(int Pulse_Width2){
      Pulse_Width2=abs(Pulse_Width2);
      analogWrite(motor2_en, Pulse_Width2);
      analogWrite(motor4_en, Pulse_Width2);
-     digitalWrite(sag_o_1, HIGH);
-     digitalWrite(sag_o_2, LOW);
+     digitalWrite(sag_o_2, HIGH);
+     digitalWrite(IN2_R, LOW);
      digitalWrite(sag_a_1, HIGH);
      digitalWrite(sag_a_2, LOW);
  }
+ if (Pulse_Width2 == 0){
+     analogWrite(motor2_en, Pulse_Width2);
+     analogWrite(motor4_en, Pulse_Width2);
+     digitalWrite(sag_o_1, LOW);
+     digitalWrite(sag_o_2, LOW);
+     digitalWrite(sag_a_1, LOW);
+     digitalWrite(sag_a_2, LOW);
+ }
+}
  if (Pulse_Width2 == 0){
      analogWrite(motor2_en, Pulse_Width2);
      analogWrite(motor4_en, Pulse_Width2);
