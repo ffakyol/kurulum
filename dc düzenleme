@@ -1,0 +1,138 @@
+#include <ArduinoHardware.h>
+#include <ros.h>
+#include <geometry_msgs/Twist.h>
+
+
+
+#define sag_o_1 16
+#define sag_o_2 17
+
+#define motor1_en 57
+
+#define sag_a_1 27
+#define sag_a_2 29
+
+#define motor3_en 65
+
+#define sol_o_1 23
+#define sol_o_2 25
+
+#define motor2_en 58
+
+#define sol_a_1 31
+#define sol_a_2 33
+
+#define motor4_en 66
+
+double w_r=0, w_l=0;
+//wheel_rad is the wheel radius ,wheel_sep is
+double wheel_rad = 0.0325, wheel_sep = 0.295;
+
+ros::NodeHandle nh;
+
+int lowSpeed = 200;
+int highSpeed = 50;
+double speed_ang=0, speed_lin=0;
+
+void deger(const geometry_msgs::Twist& msg)
+{
+  speed_ang = msg.angular.z;
+  speed_lin = msg.linear.x;
+  w_r = (speed_lin/wheel_rad) + ((speed_ang*wheel_sep)/(2.0*wheel_rad));
+  w_l = (speed_lin/wheel_rad) - ((speed_ang*wheel_sep)/(2.0*wheel_rad));
+}
+ros::Subscriber<geometry_msgs::Twist> sub("cmd_vel", &deger );
+void Motor_init();
+void MotorL(int Pulse_Width1);
+void MotorR(int Pulse_Width2);
+
+
+void setup()
+{
+ Motor_init();
+ nh.initNode();
+ nh.subscribe(sub);
+
+}
+
+void loop()
+
+{
+ MotorL(w_l*10);
+ MotorR(w_r*10);
+nh.spinOnce();
+delay(100);
+}
+void Motor_init()
+{
+  pinMode(sag_o_1, OUTPUT); // motor sürücü pinleri çıkış olarak ayarlandı
+  pinMode(sag_o_2, OUTPUT);
+  pinMode(sag_a_1, OUTPUT);
+  pinMode(sag_a_2, OUTPUT);
+
+  pinMode(sol_o_1, OUTPUT); // motor sürücü pinleri çıkış olarak ayarlandı
+  pinMode(sol_o_2, OUTPUT);
+  pinMode(sol_a_1, OUTPUT);
+  pinMode(sol_a_2, OUTPUT);
+
+  pinMode(motor1_en, OUTPUT); // motor sürücü enable pinleri çıkış olarak ayarlandı
+  pinMode(motor2_en, OUTPUT);
+  pinMode(motor3_en, OUTPUT);
+  pinMode(motor4_en, OUTPUT);
+}
+
+void MotorL(int Pulse_Width1){
+ if (Pulse_Width1 > 0){
+     analogWrite(motor1_en, Pulse_Width1);
+     analogWrite(motor3_en, Pulse_Width1);
+     digitalWrite(sag_o_1, HIGH);
+     digitalWrite(sag_o_2, LOW);
+     digitalWrite(sag_a_1, HIGH);
+     digitalWrite(sag_a_2, LOW);
+     
+ }
+ if (Pulse_Width1 < 0){
+     Pulse_Width1=abs(Pulse_Width1);
+     analogWrite(motor1_en, Pulse_Width1);
+     analogWrite(motor3_en, Pulse_Width1);
+     digitalWrite(sag_o_1, LOW);
+     digitalWrite(sag_o_2, HIGH);
+     digitalWrite(sag_a_1, LOW);
+     digitalWrite(sag_a_2, HIGH);
+ }
+ if (Pulse_Width1 == 0){
+     analogWrite(motor1_en, Pulse_Width1);
+     analogWrite(motor3_en, Pulse_Width1);
+     digitalWrite(sag_o_1, LOW);
+     digitalWrite(sag_o_2, LOW);
+     digitalWrite(sag_a_1, LOW);
+     digitalWrite(sag_a_2, LOW);
+ }
+}
+void MotorR(int Pulse_Width2){
+ if (Pulse_Width2 > 0){
+     analogWrite(motor2_en, Pulse_Width2);
+     analogWrite(motor4_en, Pulse_Width2);
+     digitalWrite(sag_o_1, LOW);
+     digitalWrite(sag_o_2, HIGH);
+     digitalWrite(sag_a_1, LOW);
+     digitalWrite(sag_a_2, HIGH);
+ }
+ if (Pulse_Width2 < 0){
+     Pulse_Width2=abs(Pulse_Width2);
+     analogWrite(motor2_en, Pulse_Width2);
+     analogWrite(motor4_en, Pulse_Width2);
+     digitalWrite(sag_o_2, HIGH);
+     digitalWrite(IN2_R, LOW);
+     digitalWrite(sag_a_1, HIGH);
+     digitalWrite(sag_a_2, LOW);
+ }
+ if (Pulse_Width2 == 0){
+     analogWrite(motor2_en, Pulse_Width2);
+     analogWrite(motor4_en, Pulse_Width2);
+     digitalWrite(sag_o_1, LOW);
+     digitalWrite(sag_o_2, LOW);
+     digitalWrite(sag_a_1, LOW);
+     digitalWrite(sag_a_2, LOW);
+ }
+}
