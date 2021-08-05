@@ -25,7 +25,7 @@
 
 #define motor4_en 66
 
-#define MOTOR_STEPS 200
+#define MOTOR_STEPS 200off
 #define X_STEP_PIN         54
 #define X_DIR_PIN          55
 #define X_ENABLE_PIN       38
@@ -45,16 +45,7 @@
 #define Z_MAX_PIN          19
 
 
-#define E_STEP_PIN         26
-#define E_DIR_PIN          28
-#define E_ENABLE_PIN       24
-
-#define Q_STEP_PIN         36
-#define Q_DIR_PIN          34
-#define Q_ENABLE_PIN       30
-
 double w_r=0, w_l=0;
-//wheel_rad is the wheel radius ,wheel_sep is
 double wheel_rad = 0.0325, wheel_sep = 0.295;
 
 ros::NodeHandle nh;
@@ -79,14 +70,10 @@ void MotorR(int Pulse_Width2);
 A4988 stepper1(MOTOR_STEPS, X_DIR_PIN, X_STEP_PIN );
 A4988 stepper2(MOTOR_STEPS, Y_DIR_PIN, Y_STEP_PIN);
 A4988 stepper3(MOTOR_STEPS, Z_DIR_PIN, Z_STEP_PIN );
-A4988 stepper4(MOTOR_STEPS, E_DIR_PIN, E_STEP_PIN);
-A4988 stepper5(MOTOR_STEPS, Q_DIR_PIN, Q_STEP_PIN);
+
 
 void startMotor1(const std_msgs::Empty& toggle_msg){
-  digitalWrite(E_STEP_PIN    , HIGH);
-  digitalWrite(E_DIR_PIN    , HIGH);
-  digitalWrite(Q_STEP_PIN , HIGH);
-  digitalWrite(Q_DIR_PIN , HIGH);
+
   digitalWrite(Z_STEP_PIN    , HIGH);
   digitalWrite(Z_DIR_PIN    , HIGH);
   digitalWrite(Y_STEP_PIN    , HIGH);
@@ -98,11 +85,11 @@ void startMotor1(const std_msgs::Empty& toggle_msg){
   stepper2.rotate(360);
   stepper4.begin(15, 16);
   stepper4.rotate(360);
- stepper5.begin(15, 16);
+  stepper5.begin(15, 16);
   stepper5.rotate(360);
-   stepper3.begin(15, 16);
- stepper3.rotate(360);
-   stepper1.begin(15, 16);
+  stepper3.begin(15, 16);
+  stepper3.rotate(360);
+  stepper1.begin(15, 16);
   stepper1.rotate(360);
 
 
@@ -113,11 +100,7 @@ void startMotor1(const std_msgs::Empty& toggle_msg){
   digitalWrite(Z_STEP_PIN    , LOW);
   digitalWrite(Z_DIR_PIN    , LOW);
 
-  digitalWrite(E_STEP_PIN    , LOW);
-  digitalWrite(E_DIR_PIN    , LOW);
-  digitalWrite(Q_STEP_PIN    , LOW);
-  digitalWrite(Q_DIR_PIN    , LOW);
-  
+
 
 }
 
@@ -143,16 +126,7 @@ void setup() {
   pinMode(Z_DIR_PIN    , OUTPUT);
   pinMode(Z_ENABLE_PIN    , OUTPUT);
   
-  pinMode(E_STEP_PIN  , OUTPUT);
-  pinMode(E_DIR_PIN    , OUTPUT);
-  pinMode(E_ENABLE_PIN    , OUTPUT);
   
-  pinMode(Q_STEP_PIN  , OUTPUT);
-  pinMode(Q_DIR_PIN    , OUTPUT);
-  pinMode(Q_ENABLE_PIN    , OUTPUT);
-  
-  
-
   
   nh.initNode();
   
@@ -182,14 +156,7 @@ void loop() {
   digitalWrite(Z_STEP_PIN    , LOW);
   digitalWrite(Z_DIR_PIN    , LOW);
   digitalWrite(Z_ENABLE_PIN    , LOW);
-    
-  digitalWrite(E_STEP_PIN    , LOW);
-  digitalWrite(E_DIR_PIN    , LOW);
-  digitalWrite(E_ENABLE_PIN    , LOW);
-    
-  digitalWrite(Q_STEP_PIN    , LOW);
-  digitalWrite(Q_DIR_PIN    , LOW);
-  digitalWrite(Q_ENABLE_PIN    , LOW);
+
 }
 void Motor_init()
 {
@@ -250,8 +217,8 @@ void MotorR(int Pulse_Width2){
      Pulse_Width2=abs(Pulse_Width2);
      analogWrite(motor2_en, Pulse_Width2);
      analogWrite(motor4_en, Pulse_Width2);
-     digitalWrite(sag_o_2, HIGH);
-     digitalWrite(IN2_R, LOW);
+     digitalWrite(sag_o_1, HIGH);
+     digitalWrite(sag_o_2, LOW);
      digitalWrite(sag_a_1, HIGH);
      digitalWrite(sag_a_2, LOW);
  }
@@ -263,7 +230,7 @@ void MotorR(int Pulse_Width2){
      digitalWrite(sag_a_1, LOW);
      digitalWrite(sag_a_2, LOW);
  }
-}
+
  if (Pulse_Width2 == 0){
      analogWrite(motor2_en, Pulse_Width2);
      analogWrite(motor4_en, Pulse_Width2);
