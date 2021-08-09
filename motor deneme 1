@@ -35,6 +35,8 @@ pinMode(inputD2, OUTPUT);
 
 void loop()
 {
+analogWrite(enA, 255);
+analogWrite(enB, 255);
 digitalWrite(inputA1, LOW);
 digitalWrite(inputA2, HIGH);
 delay(3000);
