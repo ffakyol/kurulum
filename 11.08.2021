@@ -1,0 +1,94 @@
+#include <ArduinoHardware.h>
+#include <ros.h>
+#include <geometry_msgs/Twist.h>
+
+
+#define  Enable_A  57
+#define  Enable_B  58
+#define  Enable_C  65
+#define  Enable_D  66
+
+#define  inputA1  16
+#define  inputA2  17
+
+#define  inputB1  27
+#define  inputB2  29
+
+#define  inputC1  23
+#define  inputC2  25
+
+#define  inputD1  31
+#define  inputD2  33
+
+ros::NodeHandle nh;
+void setup()
+{
+ // Set all the motor control pins to outputs
+
+ nh.initNode();
+ nh.subscribe(sub);
+ 
+ pinMode(Enable_A, OUTPUT);
+ pinMode(Enable_B, OUTPUT);
+ pinMode(inputA1, OUTPUT);
+ pinMode(inputA2, OUTPUT);
+ pinMode(in3, OUTPUT);
+ pinMode(in4, OUTPUT);
+ 
+ // Turn off motors - Initial state
+ digitalWrite(inputA1, LOW);
+ digitalWrite(inputA2, LOW);
+ digitalWrite(inputB1, LOW);
+ digitalWrite(in4, LOW);
+}
+void loop()
+{
+nh.spinOnce();
+delay(100);
+directionControl();
+delay(1000);
+speedControl();
+delay(1000);
+}
+void directionControl()
+{
+
+ analogWrite(Enable_A, 255);
+ analogWrite(Enable_B, 255);
+digitalWrite(inputA1, LOW);
+digitalWrite(inputA2, HIGH);
+}
+ros::Subscriber<geometry_msgs::Twist> sub("cmd_vel", &directionControl );
+
+void speedControl()
+{
+ // Turn on motors
+ digitalWrite(inputA1, LOW);
+ digitalWrite(inputA2, HIGH);
+ digitalWrite(inputB1, LOW);
+ digitalWrite(in4, HIGH);
+ 
+ // Accelerate from zero to maximum speed
+ for (int i = 0; i < 256; i++)
+ {
+   analogWrite(Enable_A, i);
+   analogWrite(Enable_B, i);
+   delay(20);
+ }
+ 
+ // Decelerate from maximum speed to zero
+ for (int i = 255; i >= 0; --i)
+ {
+   analogWrite(Enable_A, i);
+   analogWrite(Enable_B, i);
+   delay(20);
+ }
+ 
+ // Now turn off motors
+ digitalWrite(inputA1, LOW);
+ digitalWrite(inputA2, LOW);
+ digitalWrite(inputB1, LOW);
+ digitalWrite(inputB1, LOW);
+}
+ros::Subscriber<geometry_msgs::Twist> sub("cmd_vel", &speedControl );
+
