@@ -1,0 +1,41 @@
+#define  Enable_A  57
+#define  Enable_B  58
+#define  Enable_C  65
+#define  Enable_D  66
+
+#define  inputA1  16
+#define  inputA2  17
+
+#define  inputB1  27
+#define  inputB2  29
+
+#define  inputC1  23
+#define  inputC2  25
+
+#define  inputD1  31
+#define  inputD2  33
+
+void setup()
+{
+pinMode(Enable_A, OUTPUT);
+pinMode(Enable_B, OUTPUT);
+pinMode(Enable_C, OUTPUT);
+pinMode(Enable_D, OUTPUT);
+
+pinMode(inputA1, OUTPUT);
+pinMode(inputA2, OUTPUT);
+pinMode(inputB1, OUTPUT);
+pinMode(inputB2, OUTPUT);
+
+pinMode(inputC1, OUTPUT);
+pinMode(inputC2, OUTPUT);
+pinMode(inputD1, OUTPUT);
+pinMode(inputD2, OUTPUT);
+}
+
+void loop()
+{
+digitalWrite(inputA1, LOW);
+digitalWrite(inputA2, HIGH);
+delay(3000);
+}
